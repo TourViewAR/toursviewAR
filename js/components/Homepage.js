@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Image, StyleSheet } from "react-native";
+import { Image, StyleSheet } from "react-native";
 import {
   Container,
   Header,
@@ -11,7 +11,8 @@ import {
   Left,
   Body,
   Right,
-  Title
+  Title,
+  View
 } from "native-base";
 
 export default class HomePage extends Component {
@@ -33,34 +34,25 @@ export default class HomePage extends Component {
           <View style={{ alignItems: "center" }}>
             <Image
               style={{ width: 300, height: 200, justifyContent: "center" }}
-              source={require("../res/logo.png")}
+              source={require("/Users/EuiHyo_Mi/Desktop/MVP/client/js/components/image.png")}
             ></Image>
           </View>
-          <View style={{ alignContent: "space-around" }}>
-            <Button block light>
+          <View>
+            <Button block light style={styles.button}>
               <Text>Search</Text>
             </Button>
-            <Button block light>
+            <Button block light style={styles.button}>
               <Text>Profile</Text>
             </Button>
-            <Button block light>
+            <Button block light style={styles.button}>
               <Text>Create</Text>
             </Button>
           </View>
         </Content>
         <Footer>
           <FooterTab>
-            <Button>
-              <Text>Apps</Text>
-            </Button>
-            <Button>
-              <Text>Camera</Text>
-            </Button>
-            <Button>
-              <Text>Navigate</Text>
-            </Button>
-            <Button>
-              <Text>Contact</Text>
+            <Button full>
+              <Text>Log Out</Text>
             </Button>
           </FooterTab>
         </Footer>
@@ -74,9 +66,5 @@ let styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around"
   },
-  button: {
-    width: 200,
-    height: 100,
-    color: "#f194ff"
-  }
+  button: { marginTop: 60, marginHorizontal: 50, padding: 40 }
 });
