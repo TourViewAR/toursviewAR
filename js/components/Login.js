@@ -31,6 +31,8 @@ import HomePage from "./Homepage";
 import Signup from "./Signup";
 import { connect } from "react-redux";
 
+import Profile from "./Profile";
+
 var sharedProps = {
   apiKey: "API_KEY_HERE"
 };
@@ -43,6 +45,8 @@ var UNSET = "UNSET";
 var VR_NAVIGATOR_TYPE = "VR";
 var AR_NAVIGATOR_TYPE = "AR";
 var REACT_NATIVE_SIGNUP = "SIGNUP";
+var REACT_NATIVE_HOME = "REACT_NATIVE_HOME";
+var PROFILE = "PROFILE";
 
 // This determines which type of experience to launch in, or UNSET, if the user should
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
@@ -60,9 +64,8 @@ class Login extends Component {
     this._getARNavigator = this._getARNavigator.bind(this);
     this._getVRNavigator = this._getVRNavigator.bind(this);
     this._getReactNativeHome = this._getReactNativeHome.bind(this);
-    this._getExperienceButtonOnPress = this._getExperienceButtonOnPress.bind(
-      this
-    );
+    this._getExperienceButtonOnPress = this._getExperienceButtonOnPress.bind(this);
+    this._getProfilePage = this._getProfilePage.bind(this);
     this._exitViro = this._exitViro.bind(this);
   }
   render() {
@@ -79,6 +82,8 @@ class Login extends Component {
       return this._getReactNativeHome();
     } else if (this.state.navigatorType === REACT_NATIVE_SIGNUP) {
       return this._getReactNativeSignup();
+    } else if (this.state.navigatorType === PROFILE) {
+      return this._getProfilePage();
     }
   }
 
@@ -137,6 +142,15 @@ class Login extends Component {
             >
               <Text style={styles.buttonText}>SIGN UP</Text>
             </TouchableHighlight>
+
+ <TouchableHighlight
+          style={styles.buttons}
+          onPress={this._getExperienceButtonOnPress(PROFILE)}
+          underlayColor={"#68a0dd"}
+        >
+          <Text style={styles.buttonText}>PROFILE</Text>
+        </TouchableHighlight>
+
           </View>
         </Content>
       </Container>
@@ -171,6 +185,11 @@ class Login extends Component {
   _getReactNativeSignup() {
     return <Signup />;
   }
+
+  _getProfilePage() {
+    return <Profile />;
+  }
+
   // This function returns an anonymous/lambda function to be used
   // by the experience selector buttons
   _getExperienceButtonOnPress(navigatorType) {
