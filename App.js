@@ -8,6 +8,9 @@
  */
 
 import React, { Component } from "react";
+import { Provider } from "react-redux";
+import { store } from "./js/redux/store.js";
+
 import {
   AppRegistry,
   Text,
@@ -35,12 +38,14 @@ export default class ViroSample extends Component {
   // if you are building a specific type of experience.
   render() {
     return (
-      <View style={localStyles.outer}>
-        <View style={localStyles.inner}>
-          <Login />
-          {/* <UploadPhotoScreen /> */}
+      <Provider store={store}>
+        <View style={localStyles.outer}>
+          <View style={localStyles.inner}>
+            <Login />
+            {/* <UploadPhotoScreen /> */}
+          </View>
         </View>
-      </View>
+      </Provider>
     );
   }
 }

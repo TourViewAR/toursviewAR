@@ -6,12 +6,30 @@ import {
   Image,
   AppRegistry,
   PixelRatio,
-  TouchableHighlight,
-  Text
+  TouchableHighlight
 } from "react-native";
+import {
+  Container,
+  Header,
+  Content,
+  Form,
+  Item,
+  Input,
+  Label,
+  Title,
+  Button,
+  Text,
+  Left,
+  Body,
+  Right
+} from "native-base";
 import { ViroVRSceneNavigator, ViroARSceneNavigator } from "react-viro";
+import { selectLogOutRender } from "../redux/render/render.selectors";
+import { renderLogOut, renderLogIn } from "../redux/render/render.action";
 
 import HomePage from "./Homepage";
+import Signup from "./Signup";
+import { connect } from "react-redux";
 
 import Profile from "./Profile";
 
@@ -26,6 +44,7 @@ var InitialARScene = require("../HelloWorldSceneAR.js");
 var UNSET = "UNSET";
 var VR_NAVIGATOR_TYPE = "VR";
 var AR_NAVIGATOR_TYPE = "AR";
+var REACT_NATIVE_SIGNUP = "SIGNUP";
 var REACT_NATIVE_HOME = "REACT_NATIVE_HOME";
 var PROFILE = "PROFILE";
 
@@ -33,7 +52,7 @@ var PROFILE = "PROFILE";
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
 
@@ -50,14 +69,19 @@ export default class Login extends Component {
     this._exitViro = this._exitViro.bind(this);
   }
   render() {
-    if (this.state.navigatorType == UNSET) {
+    if (
+      this.props.selectLogOutRender === true &&
+      this.state.navigatorType === UNSET
+    ) {
       return this._getExperienceSelector();
     } else if (this.state.navigatorType == VR_NAVIGATOR_TYPE) {
       return this._getVRNavigator();
     } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
       return this._getARNavigator();
-    } else if (this.state.navigatorType === REACT_NATIVE_HOME) {
+    } else if (this.props.selectLogOutRender === false) {
       return this._getReactNativeHome();
+    } else if (this.state.navigatorType === REACT_NATIVE_SIGNUP) {
+      return this._getReactNativeSignup();
     } else if (this.state.navigatorType === PROFILE) {
       return this._getProfilePage();
     }
@@ -66,40 +90,70 @@ export default class Login extends Component {
   // Presents the user with a choice of an AR or VR experience
   _getExperienceSelector() {
     return (
-      <View style={styles.outer}>
-        <View style={styles.logoContainer}>
+      <Container style={{ width: 400, height: 700 }}>
+        <Header>
+          <Left />
+          <Body>
+            <Title>Tour AR</Title>
+          </Body>
+          <Right />
+        </Header>
+        <View style={{ alignItems: "center" }}>
           <Image
             source={require("../res/logo.png")}
             style={{ height: 200, width: 200 }}
           />
-          <TextInput style={styles.title}>LOGIN</TextInput>
-          <TextInput style={styles.title}>PASSWORD</TextInput>
         </View>
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
-          underlayColor={"#68a0ff"}
-        >
-          <Text style={styles.buttonText}>AR</Text>
-        </TouchableHighlight>
+        <Content>
+          <Form>
+            <Item floatingLabel>
+              <Label>Username</Label>
+              <Input />
+            </Item>
+            <Item floatingLabel last>
+              <Label>Password</Label>
+              <Input />
+            </Item>
+          </Form>
+          <Button block light style={{ marginBottom: 30 }}>
+            <Text>Login</Text>
+          </Button>
+          <View style={styles.outer}>
+            <TouchableHighlight
+              style={styles.buttons}
+              onPress={this._getExperienceButtonOnPress(AR_NAVIGATOR_TYPE)}
+              underlayColor={"#68a0ff"}
+            >
+              <Text style={styles.buttonText}>AR</Text>
+            </TouchableHighlight>
 
-        <TouchableHighlight
-          style={styles.buttons}
-          onPress={this._getExperienceButtonOnPress(REACT_NATIVE_HOME)}
-          underlayColor={"#68a0dd"}
-        >
-          <Text style={styles.buttonText}>HOMEPAGE</Text>
-        </TouchableHighlight>
+            <TouchableHighlight
+              style={styles.buttons}
+              onPress={this.props.renderLogIn}
+              underlayColor={"#68a0dd"}
+            >
+              <Text style={styles.buttonText}>HOMEPAGE</Text>
+            </TouchableHighlight>
 
-        <TouchableHighlight
+            <TouchableHighlight
+              style={styles.buttons}
+              onPress={this._getExperienceButtonOnPress(REACT_NATIVE_SIGNUP)}
+              underlayColor={"#68a0dd"}
+            >
+              <Text style={styles.buttonText}>SIGN UP</Text>
+            </TouchableHighlight>
+
+ <TouchableHighlight
           style={styles.buttons}
           onPress={this._getExperienceButtonOnPress(PROFILE)}
           underlayColor={"#68a0dd"}
         >
           <Text style={styles.buttonText}>PROFILE</Text>
         </TouchableHighlight>
-        <View style={styles.formContainer}></View>
-      </View>
+
+          </View>
+        </Content>
+      </Container>
     );
   }
 
@@ -126,6 +180,10 @@ export default class Login extends Component {
 
   _getReactNativeHome() {
     return <HomePage />;
+  }
+
+  _getReactNativeSignup() {
+    return <Signup />;
   }
 
   _getProfilePage() {
@@ -194,11 +252,11 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     textAlign: "center",
-    fontSize: 20
+    fontSize: 15
   },
   buttons: {
-    height: 80,
-    width: 150,
+    height: 60,
+    width: 120,
     paddingTop: 20,
     paddingBottom: 20,
     marginTop: 10,
@@ -221,3 +279,18 @@ const styles = StyleSheet.create({
     borderColor: "#fff"
   }
 });
+
+const mapDispatchToProps = dispatch => {
+  return {
+    renderLogOut: () => dispatch(renderLogOut()),
+    renderLogIn: () => dispatch(renderLogIn())
+  };
+};
+
+const mapStateToProps = state => {
+  return {
+    selectLogOutRender: selectLogOutRender(state)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
