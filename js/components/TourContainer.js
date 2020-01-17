@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
 import {
   Text,
   View,
   StyleSheet,
   Image,
-  TouchableHighlight,
-} from 'react-native';
+  TouchableHighlight
+} from "react-native";
 
 class TourContainer extends Component {
   constructor() {
     super();
-    this.state = {
-
-    }
+    this.state = {};
   }
 
   render() {
@@ -22,7 +20,7 @@ class TourContainer extends Component {
         <Text>{`experience name placeholder`}</Text>
         <Text>{`experience details placeholder`}</Text>
       </View>
-    )
+    );
   }
 }
 

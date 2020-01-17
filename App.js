@@ -10,6 +10,7 @@
 import React, { Component } from "react";
 import { Provider } from "react-redux";
 import { store } from "./js/redux/store.js";
+import "react-native-gesture-handler";
 
 import {
   AppRegistry,
