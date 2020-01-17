@@ -1,5 +1,8 @@
 import React, { Component } from "react";
 import { Image, StyleSheet } from "react-native";
+import { connect } from "react-redux";
+import { renderLogOut } from "../redux/render/render.action";
+import { selectLogOutRender } from "../redux/render/render.selectors";
 import {
   Container,
   Header,
@@ -12,10 +15,12 @@ import {
   Body,
   Right,
   Title,
-  View
+  View,
+  Thumbnail,
+  CardItem
 } from "native-base";
 
-const HomePage = () => {
+const HomePage = props => {
   return (
     <Container>
       <Header>
@@ -26,13 +31,21 @@ const HomePage = () => {
         <Right />
       </Header>
       <Content>
-        <View style={{ alignItems: "center" }}>
+        <View style={{ alignItems: "center", marginBottom: 30 }}>
           <Image
-            style={{ width: 300, height: 200, justifyContent: "center" }}
+            style={{ width: 300, height: 150, justifyContent: "center" }}
             source={require("../res/logo.png")}
           ></Image>
         </View>
-        <View>
+        <CardItem>
+          <Body style={{ alignItems: "center" }}>
+            <View>
+              <Thumbnail large source={require("../res/aaron.jpg")}></Thumbnail>
+              <Text>Senior Aaron</Text>
+            </View>
+          </Body>
+        </CardItem>
+        <View style={{ marginTop: 50 }}>
           <Button block light style={styles.button}>
             <Text>Search</Text>
           </Button>
@@ -40,13 +53,13 @@ const HomePage = () => {
             <Text>Profile</Text>
           </Button>
           <Button block light style={styles.button}>
-            <Text>Create AR</Text>
+            <Text>CREATE</Text>
           </Button>
         </View>
       </Content>
       <Footer>
         <FooterTab>
-          <Button full>
+          <Button onPress={props.renderLogOut} full>
             <Text>Log Out</Text>
           </Button>
         </FooterTab>
@@ -60,7 +73,17 @@ let styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-around"
   },
-  button: { marginTop: 60, marginHorizontal: 50, padding: 40 }
+  button: { marginTop: 20, marginHorizontal: 50 }
 });
 
-export default HomePage;
+const mapDispatchToProps = dispatch => {
+  return { renderLogOut: () => dispatch(renderLogOut()) };
+};
+
+const mapStateToProps = state => {
+  return {
+    selectLogOutRender: selectLogOutRender(state)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

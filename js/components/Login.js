@@ -10,8 +10,11 @@ import {
   Text
 } from "react-native";
 import { ViroVRSceneNavigator, ViroARSceneNavigator } from "react-viro";
+import { selectLogOutRender } from "../redux/render/render.selectors";
+import { renderLogOut, renderLogIn } from "../redux/render/render.action";
 
 import HomePage from "./Homepage";
+import { connect } from "react-redux";
 
 var sharedProps = {
   apiKey: "API_KEY_HERE"
@@ -30,7 +33,7 @@ var REACT_NATIVE_HOME = "REACT_NATIVE_HOME";
 // be presented with a choice of AR or VR. By default, we offer the user a choice.
 var defaultNavigatorType = UNSET;
 
-export default class Login extends Component {
+class Login extends Component {
   constructor() {
     super();
 
@@ -48,13 +51,13 @@ export default class Login extends Component {
     this._exitViro = this._exitViro.bind(this);
   }
   render() {
-    if (this.state.navigatorType == UNSET) {
+    if (this.props.selectLogOutRender === true) {
       return this._getExperienceSelector();
     } else if (this.state.navigatorType == VR_NAVIGATOR_TYPE) {
       return this._getVRNavigator();
     } else if (this.state.navigatorType == AR_NAVIGATOR_TYPE) {
       return this._getARNavigator();
-    } else if (this.state.navigatorType === REACT_NATIVE_HOME) {
+    } else if (this.props.selectLogOutRender === false) {
       return this._getReactNativeHome();
     }
   }
@@ -81,12 +84,11 @@ export default class Login extends Component {
 
         <TouchableHighlight
           style={styles.buttons}
-          onPress={this._getExperienceButtonOnPress(REACT_NATIVE_HOME)}
+          onPress={this.props.renderLogIn}
           underlayColor={"#68a0dd"}
         >
           <Text style={styles.buttonText}>HOMEPAGE</Text>
         </TouchableHighlight>
-        <View style={styles.formContainer}></View>
       </View>
     );
   }
@@ -205,3 +207,18 @@ const styles = StyleSheet.create({
     borderColor: "#fff"
   }
 });
+
+const mapDispatchToProps = dispatch => {
+  return {
+    renderLogOut: () => dispatch(renderLogOut()),
+    renderLogIn: () => dispatch(renderLogIn())
+  };
+};
+
+const mapStateToProps = state => {
+  return {
+    selectLogOutRender: selectLogOutRender(state)
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
