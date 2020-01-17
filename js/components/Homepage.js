@@ -22,7 +22,7 @@ import {
 
 const HomePage = props => {
   return (
-    <Container>
+    <Container style={{ width: 400, height: 700 }}>
       <Header>
         <Left />
         <Body>
